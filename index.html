@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fff7f5"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>💕 우리의 다음 여행</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f4f2;color:#292624;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.app{max-width:520px;min-height:100vh;margin:auto;background:#fff;padding:28px 22px 40px}
+h1,h2,p{margin:0}.top{font-size:13px;color:#a47f76;margin-bottom:18px}.hero{padding:22px 0 30px}.heart{font-size:30px;margin-bottom:12px}.hero h1{font-size:31px;line-height:1.25;letter-spacing:-1.5px}.hero p{margin-top:12px;color:#777;line-height:1.6}.progress{height:5px;background:#eee;border-radius:10px;overflow:hidden;margin:12px 0 28px}.bar{height:100%;width:0;background:#d98c82;transition:.25s}.qno{font-size:13px;color:#b07f76;margin-bottom:9px}.question{font-size:22px;font-weight:750;line-height:1.4;letter-spacing:-.8px;margin-bottom:18px}.choices{display:grid;gap:11px}.choice{border:1px solid #e8e3e0;border-radius:15px;padding:16px;text-align:left;background:white;font-size:15px;line-height:1.45;cursor:pointer}.choice:hover{border-color:#d9aaa2}.choice.selected{border:2px solid #d98c82;background:#fff7f5;padding:15px}.btn{width:100%;border:0;border-radius:15px;padding:16px;background:#292624;color:white;font-size:16px;font-weight:700;margin-top:22px;cursor:pointer}.btn:disabled{background:#d5d1cf}.back{background:none;color:#888;font-weight:500;margin-top:10px}.result{text-align:center}.result .heart{margin-top:12px}.result h2{font-size:27px;line-height:1.35;letter-spacing:-1px}.sub{color:#777;line-height:1.6;margin:10px 0 22px}.profile{background:#fff7f5;border-radius:18px;padding:18px;text-align:left;margin-bottom:20px}.profile b{font-size:15px}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.tag{padding:7px 10px;background:white;border-radius:999px;font-size:12px;color:#88645e}.dest{border:1px solid #ebe6e3;border-radius:18px;padding:17px;margin:12px 0;text-align:left}.dest .rank{font-size:12px;color:#bd8178}.dest h3{font-size:20px;margin:5px 0}.reason{font-size:13px;color:#777;line-height:1.5}.score{float:right;font-weight:800;color:#c57469}.day{background:#faf9f8;border-radius:18px;padding:17px;margin:11px 0;text-align:left}.day h3{margin:0 0 12px;font-size:16px}.item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #eee;font-size:13px}.item:last-child{border:0}.time{width:45px;color:#a17d76;font-weight:700}.small{font-size:12px;color:#999;margin-top:18px;line-height:1.5}.hide{display:none}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const qs=[
+["여행에서 가장 기대되는 건 뭐야?",["예쁜 자연과 풍경","맛있는 음식 찾아다니기","도시 구경과 쇼핑","숙소에서 푹 쉬기","새롭고 특별한 경험"]],
+["하루 일정을 어떻게 보내는 게 좋아?",["한두 곳만 보고 아주 여유롭게","2~3곳 정도 적당히","아침부터 밤까지 알차게","그날그날 기분 따라"]],
+["아침에는 어떤 스타일이야?",["늦잠은 필수","10시쯤 천천히 시작","일찍 일어나도 괜찮아","일찍 일어나서 많이 보고 싶어"]],
+["이동이 많은 여행은?",["싫어! 한곳에서 오래","조금이면 괜찮아","웬만하면 괜찮아","이동해도 여러 곳 가고 싶어"]],
+["숙소에 돈을 쓰는 건?",["잠만 자면 돼, 가성비","깔끔하면 충분해","좋은 호텔이면 여행 만족도가 올라가","숙소 자체가 여행의 목적!"]],
+["맛집은 얼마나 중요해?",["배만 채우면 돼","유명한 곳 몇 군데","맛집 찾아가는 것도 여행","하루의 핵심은 맛있는 음식"]],
+["카페는?",["굳이 안 가도 돼","예쁜 곳 한두 군데","카페 투어 좋아","분위기 좋은 카페에서 오래 있고 싶어"]],
+["관광지는?",["유명한 곳은 꼭 가야지","핵심 명소만","많이 볼수록 좋아","관광보다는 휴식이 좋아"]],
+["쇼핑은?",["관심 없어","기념품 정도","시간 있으면 하고 싶어","쇼핑도 여행의 큰 즐거움"]],
+["여행 중 사진은?",["많이 찍고 싶어","예쁜 곳에서만","인생샷 건지는 게 중요","사진보다는 순간을 즐기고 싶어"]],
+["밤에는?",["일찍 숙소에서 쉬기","맛있는 저녁 후 산책","야경이나 술 한잔","늦게까지 놀기"]],
+["자연 vs 도시라면?",["자연 100","자연 70 / 도시 30","반반","자연 30 / 도시 70","도시 100"]],
+["여행 예산을 쓴다면 어디에?",["숙소","맛집","쇼핑","체험/관광","교통은 아끼고 전체적으로 가성비"]],
+["계획은 어느 정도 세우는 게 좋아?",["거의 안 세우기","큰 틀만","시간대까지 대략","미리 꽉 짜두기"]],
+["마지막으로 더 끌리는 여행은?",["🌊 바다 보며 쉬는 여행","🍜 맛있는 거 먹고 카페 다니는 여행","🏙️ 예쁜 도시에서 돌아다니는 여행","🏨 좋은 호텔에서 느긋하게 보내는 여행","✨ 평소와 완전히 다른 경험을 하는 여행"]]
+];
+
+let answers=[],i=0;
+const app=document.getElementById("app");
+function render(){
+ if(i>=qs.length){result();return}
+ const [q,opts]=qs[i];
+ app.innerHTML=`<div class="top">💕 OUR NEXT TRIP</div>
+ <div class="hero"><div class="heart">♡</div><h1>우리의 다음 여행</h1><p>몇 가지 질문에 답하면<br>여행 취향에 잘 맞는 여행지를 골라볼게.</p></div>
+ <div class="progress"><div class="bar" style="width:${i/qs.length*100}%"></div></div>
+ <div class="qno">${i+1} / ${qs.length}</div><div class="question">${q}</div>
+ <div class="choices">${opts.map((x,n)=>`<button class="choice" onclick="pick(${n})">${x}</button>`).join("")}</div>
+ ${i?`<button class="btn back" onclick="i--;answers.pop();render()">← 이전 질문</button>`:""}`;
+}
+function pick(n){answers[i]=n;i++;render()}
+
+function result(){
+ const counts={nature:0,food:0,city:0,rest:0,experience:0};
+ const add=(k,v)=>counts[k]+=v;
+ // Q별 가중치
+ const maps=[
+  ["nature","food","city","rest","experience"],
+  ["rest","city","experience","rest"],
+  ["rest","rest","city","city"],
+  ["rest","city","city","experience"],
+  ["rest","food","rest","rest"],
+  ["rest","food","food","food"],
+  ["rest","rest","food","rest"],
+  ["rest","city","city","rest"],
+  ["rest","rest","city","city"],
+  ["experience","experience","experience","rest"],
+  ["rest","city","experience","experience"],
+  ["nature","nature","city","city","city"],
+  ["rest","food","city","experience","rest"],
+  ["experience","experience","city","city"],
+  ["nature","food","city","rest","experience"]
+ ];
+ answers.forEach((a,qi)=>{
+   const m=maps[qi]||[];
+   if(m[a]) add(m[a], qi===0||qi===14?3:1);
+ });
+ const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ const top=sorted[0][0], second=sorted[1][0];
+ const profiles={
+  nature:["풍경을 보며 여유롭게","자연 · 감성 · 드라이브"],
+  food:["맛있는 걸 먹으며 천천히","맛집 · 카페 · 로컬"],
+  city:["예쁜 도시를 돌아다니며","도시 · 쇼핑 · 야경"],
+  rest:["좋은 곳에서 푹 쉬는","숙소 · 휴식 · 여유"],
+  experience:["평소와 다른 걸 해보는","체험 · 액티비티 · 새로운 곳"]
+ };
+ const dests={
+  "nature":[["제주","바다와 자연을 중심으로 여유롭게 즐기기 좋아.","94"],["오키나와","예쁜 바다와 느긋한 일정의 조합.","91"],["스위스","압도적인 풍경을 중심으로 여행하기 좋아.","87"]],
+  "food":[["후쿠오카","맛집·카페·쇼핑을 적당히 섞기 좋은 여행지.","95"],["타이베이","먹거리와 카페, 도시 산책을 함께 즐기기 좋아.","92"],["방콕","맛있는 음식과 호텔 휴식을 동시에 챙기기 좋아.","88"]],
+  "city":[["도쿄","쇼핑·맛집·카페·야경을 원하는 만큼 조합 가능.","95"],["홍콩","도시 풍경과 맛집, 야경을 한 번에.","91"],["싱가포르","깔끔한 도시 여행과 맛있는 음식에 강점.","88"]],
+  "rest":[["다낭","좋은 숙소에서 쉬면서 맛집과 마사지까지 즐기기 좋아.","95"],["푸꾸옥","리조트 중심으로 정말 느긋하게 보내기 좋아.","92"],["오키나와","휴식과 드라이브를 적당히 섞기 좋아.","89"]],
+  "experience":[["발리","휴양과 액티비티를 함께 즐길 수 있어.","94"],["홍콩","도시 탐험부터 음식까지 자극이 많은 여행.","90"],["대만","먹거리와 근교 여행, 새로운 경험을 섞기 좋아.","87"]]
+ };
+ const list=dests[top].concat(dests[second]).slice(0,3);
+ app.innerHTML=`<div class="top">💕 TRIP MATCH</div><div class="result">
+ <div class="heart">♥</div><h2>여행 취향 분석 완료!</h2>
+ <p class="sub">이번 여행은<br><b>${profiles[top][0]}</b> 여행이 잘 맞을 것 같아.</p>
+ <div class="profile"><b>여행 취향</b><div class="tags">${profiles[top][1].split(" · ").concat(profiles[second][1].split(" · ")).slice(0,5).map(x=>`<span class="tag">#${x}</span>`).join("")}</div></div>
+ <h2 style="font-size:20px;text-align:left;margin:22px 0 8px">💕 추천 여행지</h2>
+ ${list.map((d,n)=>`<div class="dest"><span class="rank">MATCH ${n+1}<span class="score">${d[2]}%</span></span><h3>${d[0]}</h3><div class="reason">${d[1]}</div></div>`).join("")}
+ <button class="btn" onclick="plan('${list[0][0]}')">1위 여행지로 일정 보기 →</button>
+ <button class="btn back" onclick="i=0;answers=[];render()">처음부터 다시 하기</button>
+ </div>`;
+}
+function plan(place){
+ const plans={
+ "제주":[["DAY 1","공항 → 숙소 체크인","애월 카페","해안도로 드라이브","제주 흑돼지 저녁"],["DAY 2","늦잠 & 브런치","오름/숲 산책","예쁜 카페","숙소에서 여유롭게"],["DAY 3","바다 산책","점심 맛집","기념품 쇼핑","공항 이동"]],
+ "후쿠오카":[["DAY 1","후쿠오카 도착","호텔 체크인","텐진 산책","라멘/이자카야"],["DAY 2","늦잠 & 브런치","다자이후","카페","저녁 맛집"],["DAY 3","하카타 쇼핑","점심","온천 또는 카페","야경"],["DAY 4","마지막 쇼핑","공항 이동"]],
+ "도쿄":[["DAY 1","도쿄 도착","호텔 체크인","시부야 산책","야경 & 저녁"],["DAY 2","늦잠 & 브런치","아사쿠사","카페","긴자 쇼핑"],["DAY 3","하라주쿠/오모테산도","점심 맛집","쇼핑","분위기 좋은 저녁"]],
+ "다낭":[["DAY 1","공항 → 리조트","체크인 & 휴식","마사지","해산물 저녁"],["DAY 2","늦잠","브런치","리조트 수영장","호이안 야경"],["DAY 3","마사지","카페","한시장 쇼핑","좋은 저녁"],["DAY 4","리조트에서 여유","공항 이동"]],
+ "푸꾸옥":[["DAY 1","도착","리조트 체크인","수영장","리조트 디너"],["DAY 2","늦잠","조식","해변 & 수영장","선셋 디너"],["DAY 3","가벼운 투어","마사지","리조트 휴식","야경"],["DAY 4","조식","체크아웃","공항"]],
+ "오키나와":[["DAY 1","나하 도착","렌터카/숙소","해변","오키나와 음식"],["DAY 2","늦잠","북부 드라이브","카페","선셋"],["DAY 3","바다 산책","맛집","쇼핑","숙소 휴식"]],
+ "발리":[["DAY 1","도착","리조트 체크인","마사지","선셋 디너"],["DAY 2","늦잠","브런치","풀빌라 & 수영","분위기 좋은 저녁"],["DAY 3","우붓 산책","카페","액티비티","마사지"],["DAY 4","여유로운 오전","공항 이동"]],
+ "타이베이":[["DAY 1","도착","호텔 체크인","시먼딩","야시장"],["DAY 2","브런치","도시 산책","카페","딤섬/맛집"],["DAY 3","근교 여행","점심","쇼핑","야경"]],
+ "방콕":[["DAY 1","도착","호텔 체크인","루프탑","저녁"],["DAY 2","늦잠 & 조식","사원/강변","카페","마사지"],["DAY 3","쇼핑","맛집","호텔 수영장","야경"]],
+ "홍콩":[["DAY 1","도착","호텔 체크인","침사추이","야경"],["DAY 2","브런치","센트럴","카페","딤섬"],["DAY 3","쇼핑","맛집","빅토리아 피크","마지막 밤"]],
+ "싱가포르":[["DAY 1","도착","호텔 체크인","마리나베이","저녁"],["DAY 2","브런치","가든스 바이 더 베이","카페","야경"],["DAY 3","쇼핑","맛집","호텔 휴식","공항 이동"]],
+ "스위스":[["DAY 1","취리히 도착","숙소 이동","호수 산책","저녁"],["DAY 2","산악 열차","전망대","카페","숙소 휴식"],["DAY 3","호수 마을","점심","산책","풍경 감상"]]
+ };
+ const days=plans[place]||plans["후쿠오카"];
+ app.innerHTML=`<div class="top">💕 ${place} TRIP PLAN</div><div class="result" style="text-align:left">
+ <div class="heart">✈️</div><h2>${place}<br>우리 여행 미리보기</h2>
+ <p class="sub">너무 빡빡하지 않게, 하루 핵심 일정 2~3개 중심으로 구성했어.</p>
+ ${days.map(d=>`<div class="day"><h3>${d[0]}</h3>${d.slice(1).map((x,j)=>`<div class="item"><span class="time">${["10:00","12:30","15:00","19:00"][j]||"자유"}</span><span>${x}</span></div>`).join("")}</div>`).join("")}
+ <button class="btn" onclick="share('${place}')">💕 여자친구에게 공유하기</button>
+ <button class="btn back" onclick="result()">← 추천 여행지 다시 보기</button>
+ <p class="small">※ 이 버전은 외부 API 없이 작동하는 프로토타입이라 실제 영업시간·가격·예약 가능 여부는 반영하지 않았어.</p>
+ </div>`;
+}
+function share(place){
+ const text=`💕 우리의 다음 여행\\n\\n${place} 여행 취향 테스트를 해봤어!\\n우리 여행 한번 계획해볼까?`;
+ if(navigator.share) navigator.share({title:"우리의 다음 여행",text});
+ else {navigator.clipboard?.writeText(text);alert("공유 문구를 복사했어! 카카오톡에 붙여넣어 보내면 돼 😊");}
+}
+render();
+</script>
+</body></html>
